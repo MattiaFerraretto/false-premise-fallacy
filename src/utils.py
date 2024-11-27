@@ -42,7 +42,6 @@ class SimilarityFilter:
         
 
 def parse_mcq_exercises(exercises: str):
-
     def parse_options(options: str):
         options = re.findall(r"[A-D]\) (.*?)\n", options)
         return {
@@ -64,6 +63,18 @@ def parse_mcq_exercises(exercises: str):
 
     exercises = re.findall(r"<exercise>(.*?)</exercise>", exercises, re.DOTALL)
     return [parse_exercise(exercise) for exercise in exercises]
+
+def parse_correctness_check(correctness_response: str):
+    reasoning = re.search(r"<classification_reasoning>\s*(.*?)\s*</classification_reasoning>", correctness_response, re.DOTALL,).group(1)
+    result = re.search(r"<classification>\s*(.*?)\s*</classification>", correctness_response, re.DOTALL).group(1)
+
+    return {
+        'correctness':{
+            'reasoning': reasoning,
+            'is_correct': True if result == 'correct' else False
+        }      
+    }
+
 
 
 
