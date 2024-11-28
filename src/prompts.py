@@ -5,6 +5,11 @@ B) {B}
 C) {C}
 D) {D}"""
 
+TF_EXERCISE_TEMPLATE = """{question}
+
+A) True
+B) False"""
+
 
 MCQ_EXERCISE_PROMT = """You are tasked with generating multiple-choice questions to evaluate the ability to identify false premise fallacies. Each question should present a scenario or statement containing a false premise, followed by 4 options where three of them support or extend the fallacy, and one is "None of the above." (which will be the correct answer).
 
@@ -202,7 +207,7 @@ Answer:"""
 
 EVALUATION_TEMPLATE = """Answer the following multiple choice question. You MUST answer by using the following format, nothing else: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.
 
-{Question}
+{question}
 
 A) {A}
 B) {B}
