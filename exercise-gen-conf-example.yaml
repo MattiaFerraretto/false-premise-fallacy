@@ -1,0 +1,30 @@
+models:
+  generator:
+    base_url: https://generativelanguage.googleapis.com/v1beta/openai/
+    api_keys:
+      - api1
+      - api2
+      - api3
+    #model: gemini-exp-1121
+    model: gemini-1.5-flash
+    gen_config:
+      temperature: 1.1
+      top_p: 0.95
+      max_completion_tokens: 8192
+  tester:
+    base_url: https://api.cerebras.ai/v1
+    api_key: api
+    model: llama3.1-70b
+    gen_config:
+      temperature: 0.2
+      top_p: 1
+      max_completion_tokens: 64
+  embeddings:
+    model: all-MiniLM-L6-v2
+    threshold: 0.65
+
+batch_size: 5
+topic: Economics
+difficulty: Extremely hard, Higly specific
+max_exercises: 50
+output_dir: ./output/exercises.jsonl
