@@ -8,6 +8,16 @@ from typing import List
 from hashlib import md5
 from datetime import datetime
 
+class APIkeyDispatcher:
+    def __init__(self, keys):
+        self.keys = keys
+        self.index = 0
+
+    def __call__(self):
+        key = self.keys[self.index]
+        self.index = (self.index + 1) % len(self.keys)
+        return key
+
 def format_mcq_exercise(excercise: dict):
     return MCQ_EXERCISE_TEMPLATE.format(
         question=excercise['question'],
