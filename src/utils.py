@@ -1,4 +1,6 @@
 import re
+
+from transformers.models.big_bird.tokenization_big_bird import Dict
 from prompts import MCQ_EXERCISE_TEMPLATE
 
 from sentence_transformers import SentenceTransformer
@@ -35,11 +37,15 @@ class SimilarityFilter:
         self.dimension = self.encoder.get_sentence_embedding_dimension()
         self.index = faiss.IndexFlatIP(self.dimension)
 
-
-    def filter(self, exercises: List[dict]) -> List[dict]:
+    def _get_embeddings(self, exercises: List[Dict]):
         queries = [format_mcq_exercise(exercise) for exercise in exercises]
         embeddings = self.encoder.encode(queries, normalize_embeddings=True)
         embeddings = np.expand_dims(embeddings, axis=0) if embeddings.ndim == 1 else embeddings
+
+        return embeddings
+
+    def filter(self, exercises: List[dict]) -> List[dict]:
+        embeddings = self._get_embeddings(exercises)
 
         filtered_exercises= []
         for i, embedding in enumerate(embeddings):
@@ -47,13 +53,16 @@ class SimilarityFilter:
             distance, _ = self.index.search(embedding, 1)
 
             if distance[0, 0] < self.similarity_treshold:
-                self.index.add(x=embedding)
                 filtered_exercises.append(exercises[i])
 
         return filtered_exercises
 
+    def add(self, exercise: Dict):
+        embeddings = self._get_embeddings([exercise])
+        self.index.add(x=embeddings)
 
-def parse_mcq_exercises(generator: str, exercises: str):
+
+def parse_mcq_exercises(topic: str, difficulty: str, generator: str, exercises: str):
     def parse_options(options: str):
         options_list = re.findall(r"[A-D]\) (.*?)\n", options)
         return {
@@ -63,7 +72,7 @@ def parse_mcq_exercises(generator: str, exercises: str):
             "D": options_list[3].strip(),
         }
 
-    def parse_exercise(generator: str, exercise: str):
+    def parse_exercise(topic: str, difficulty: str, generator: str, exercise: str):
         question = re.search(r"<question>(.*?)</question>", exercise, re.DOTALL)
         question = question.group(1) if question else ""
 
@@ -75,6 +84,8 @@ def parse_mcq_exercises(generator: str, exercises: str):
 
         return {
             'mcq_id': md5(f"{question.strip()}\n\n{options.strip()}".encode()).hexdigest(),
+            'topic': topic,
+            'difficulty': difficulty,
             'generator': generator,
             'date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "question": question.strip(),
@@ -83,7 +94,7 @@ def parse_mcq_exercises(generator: str, exercises: str):
         }
 
     exercises_list = re.findall(r"<exercise>(.*?)</exercise>", exercises, re.DOTALL)
-    return [parse_exercise(generator, exercise) for exercise in exercises_list]
+    return [parse_exercise(topic, difficulty, generator, exercise) for exercise in exercises_list]
 
 def parse_correctness_check(correctness_response: str):
     reasoning = re.search(r"<classification_reasoning>\s*(.*?)\s*</classification_reasoning>", correctness_response, re.DOTALL)

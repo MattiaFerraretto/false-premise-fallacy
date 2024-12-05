@@ -25,6 +25,8 @@ models:
 
 batch_size: 5
 topic: Economics
-difficulty: Extremely hard, Higly specific
+difficulty: 4
 max_exercises: 50
-output_dir: ./output/exercises.jsonl
+output_info:
+  dir: ./output
+  fname: exercises
