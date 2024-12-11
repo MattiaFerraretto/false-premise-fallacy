@@ -40,24 +40,38 @@ def generate(base_url: HttpUrl, apy_key: str, model: str, prompt: str, gen_confi
 
 
 def pipeline(config: Config):
-    similarity_filter = SimilarityFilter(
-        config.models.embeddings.model,
-        config.models.embeddings.threshold
-    )
-    api_keys_dispatcher = APIkeyDispatcher(
-        config.models.generator.api_keys
-    )
     fpath = Path(
         os.path.join(
             config.output_info.dir,
-            f"{config.output_info.fname}-{config.topic}-{config.difficulty.value}.jsonl"
+            f"{config.output_info.fname}-{config.topic}.jsonl"
         )
     )
     fpath.parent.mkdir(parents=True, exist_ok=True)
-    exercise_counter = 0
 
-    with open(fpath, 'w') as fp:
-        with tqdm(total=config.max_exercises) as pbar:
+    similarity_filter = SimilarityFilter(
+        config.models.embeddings.model,
+        config.models.embeddings.threshold,
+        os.path.join(
+            config.models.embeddings.faiss_dir,
+            f"{config.output_info.fname}-{config.topic}.faiss"
+        ),
+        config.models.embeddings.save_every
+    )
+
+    api_keys_dispatcher = APIkeyDispatcher(
+        config.models.generator.api_keys
+    )
+
+    exercise_counter = 0
+    if fpath.exists():
+        with open(fpath, 'r') as fp:
+            for line in fp:
+                exercise = json.loads(line)
+                if exercise['mcq_answer']['failed'] and exercise['difficulty'] == config.difficulty.value:
+                    exercise_counter += 1
+
+    with open(fpath, 'a') as fp:
+        with tqdm(total=config.max_exercises, initial=exercise_counter) as pbar:
             while exercise_counter < config.max_exercises:
                 ## 1. Generate exercises
                 exercise_prompt = MCQ_EXERCISE_PROMT.format(
@@ -88,7 +102,6 @@ def pipeline(config: Config):
 
                 ## 2. Check exercises similarity
                 filtered_exercises = similarity_filter.filter(exercises)
-                print(len(filtered_exercises))
 
                 ## 3. Check exercises correctness
                 correct_exercises = []
@@ -117,8 +130,6 @@ def pipeline(config: Config):
                     if correctness['correctness']['is_correct']:
                         exercise.update(correctness)
                         correct_exercises.append(exercise)
-
-                print(len(correct_exercises))
 
                 ## 4. Transform MCQ exercises into true/false ones
                 exercises_w_tfq = []
@@ -174,7 +185,6 @@ def pipeline(config: Config):
                         exercises_w_tfa.append(exercise)
 
                 ## 6. MCQ answer by the tester model
-                #mcq_exercises = []
                 for exercise in exercises_w_tfa:
                     evaluation_prompt = EVALUATION_TEMPLATE.format(
                         question=exercise['question'],
@@ -198,11 +208,11 @@ def pipeline(config: Config):
                         print("Failed to parse mcq answer")
                         continue
 
+                    exercise.update(mcq_answer)
+                    fp.write(f"{json.dumps(exercise)}\n")
+
 
                     if mcq_answer['mcq_answer']['failed']:
-                        exercise.update(mcq_answer)
-                        #mcq_exercises.append(exercise)
-                        fp.write(f"{json.dumps(exercise)}\n")
                         similarity_filter.add(exercise)
                         exercise_counter += 1
                         pbar.update(1)

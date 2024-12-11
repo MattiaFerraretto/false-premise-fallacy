@@ -42,6 +42,8 @@ class TesterConf(BaseModel):
 class EmbeddingsConf(BaseModel):
     model: str
     threshold: float
+    faiss_dir: str
+    save_every: int
 
 
 class ModelsConf(BaseModel):
