@@ -4,3 +4,4 @@ __pycache__
 .zed
 exercise-gen-conf.yaml
 script.py
+correctness.py
