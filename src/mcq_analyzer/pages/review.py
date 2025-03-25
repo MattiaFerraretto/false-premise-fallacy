@@ -31,7 +31,7 @@ B) {exercise['options']['B']}
 C) {exercise['options']['C']}
 D) {exercise['options']['D']}"""
 
-    eval_template2 = f"""Answer the following multiple-choice question. Reason briefly before concluding your answer using the format: 'Answer: $LETTER' (without quotes) where LETTER is one among A, B, C, D.
+    eval_template2 = f"""Answer the following multiple-choice question. Reason briefly before concluding your answer using the format: 'Answer: $LETTER' (without quotes) where LETTER is one option among A, B, C, D.
 
 {exercise['statement']} {exercise['question']}
 
@@ -41,7 +41,7 @@ B) {exercise['options']['B']}
 C) {exercise['options']['C']}
 D) {exercise['options']['D']}"""
 
-    pyperclip.copy(eval_template1)
+    pyperclip.copy(eval_template2)
 
 st.set_page_config(page_title="MCQ Review - Review", layout="centered")
 
