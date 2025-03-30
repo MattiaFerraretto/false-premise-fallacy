@@ -41,7 +41,7 @@ B) {exercise['options']['B']}
 C) {exercise['options']['C']}
 D) {exercise['options']['D']}"""
 
-    pyperclip.copy(eval_template2)
+    pyperclip.copy(eval_template1)
 
 st.set_page_config(page_title="MCQ Review - Review", layout="centered")
 
