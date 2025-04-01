@@ -1,0 +1,24 @@
+endpoint:
+  base_url: https://generativelanguage.googleapis.com/v1beta/openai/
+  api_key:
+  model: gemini-2.0-flash
+  gen_config:
+    temperature: 1
+    top_p: 1
+    max_completion_tokens: 2048
+
+dataset:
+  path: mferraretto/fpfeval
+  name: en
+  splits:
+    - math
+    - law
+    - economics
+    - medicine
+  token:
+
+batch_size: 4
+
+output_info:
+  dir: ./translated
+  fname: mcq-{topic}-it.jsonl

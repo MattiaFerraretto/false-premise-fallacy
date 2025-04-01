@@ -19,25 +19,20 @@ DIFFICULTY_MAPPING = {
     4: DifficultyLevel.EXTREMELY_HARD_HIGHLY_SPECIFIC
 }
 
+class Langs(str, Enum):
+    EN = 'en'
+    IT = 'it'
+
 class GenConfig(BaseModel):
     temperature: float
     top_p: float
     max_completion_tokens: int
 
-
-class GeneratorConf(BaseModel):
-    base_url: HttpUrl
-    api_keys: List[str]
-    model: str
-    gen_config: GenConfig
-
-
-class TesterConf(BaseModel):
+class EndpointConf(BaseModel):
     base_url: HttpUrl
     api_key: str
     model: str
     gen_config: GenConfig
-
 
 class EmbeddingsConf(BaseModel):
     model: str
@@ -45,19 +40,31 @@ class EmbeddingsConf(BaseModel):
     faiss_dir: str
     save_every: int
 
-
-class ModelsConf(BaseModel):
-    generator: GeneratorConf
-    tester: TesterConf
-    embeddings: EmbeddingsConf
-
-
 class OuptutInfo(BaseModel):
     dir: str
+    subdir: str = ""
     fname: str
 
-# Top-Level Configuration
-class Config(BaseModel):
+class DatsetConf(BaseModel):
+    path: str
+    name: str
+    splits: List[str] = ["math", "law", "economics", "medicice"]
+    token: str | None = None
+
+
+class TranslatorConfig(BaseModel):
+    endpoint: EndpointConf
+    dataset: DatsetConf
+    batch_size : int
+    output_info: OuptutInfo
+
+class EvalConfig(BaseModel):
+    endpoint: EndpointConf
+    dataset: DatsetConf
+    batch_size : int
+    output_info: OuptutInfo
+
+'''class Config(BaseModel):
     models: ModelsConf
     batch_size: int
     topic: str
@@ -72,4 +79,4 @@ class Config(BaseModel):
                 return DIFFICULTY_MAPPING[value]
             except KeyError as e:
                 raise ValueError(f"Invalid difficulty integer: {e.args[0]}. Allowed values are {list(DIFFICULTY_MAPPING.keys())}")
-        return value
+        return value'''

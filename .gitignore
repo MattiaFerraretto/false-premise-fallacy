@@ -3,5 +3,7 @@ __pycache__
 .env
 .zed
 exercise-gen-conf.yaml
+translator-conf.yaml
+eval-conf.yaml
 script.py
 correctness.py

@@ -1,0 +1,26 @@
+endpoint:
+  base_url: https://openrouter.ai/api/v1
+  api_key:
+  model: mistral/ministral-8b
+  gen_config:
+    temperature: 0
+    top_p: 1
+    max_completion_tokens: 4096
+
+dataset:
+  path: mferraretto/fpfeval
+  #name: en
+  name: it
+  splits:
+    - math
+    - law
+    - economics
+    - medicine
+  token:
+
+batch_size: 4
+
+output_info:
+  dir: ./results
+  subdir: history
+  fname: results-{lang}-{model}-{timestamp}
