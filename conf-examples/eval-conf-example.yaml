@@ -5,7 +5,9 @@ endpoint:
   gen_config:
     temperature: 0
     top_p: 1
-    max_completion_tokens: 4096
+    frequency_penalty: 0
+    presence_penalty: 0
+    max_completion_tokens: 8192
 
 dataset:
   path: mferraretto/fpfeval

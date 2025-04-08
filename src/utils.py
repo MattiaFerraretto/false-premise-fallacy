@@ -1,6 +1,5 @@
 import re
 
-from transformers.models.big_bird.tokenization_big_bird import Dict
 from prompts import MCQ_EXERCISE_TEMPLATE
 
 from sentence_transformers import SentenceTransformer

@@ -1,0 +1,10 @@
+embedder:
+  model: all-MiniLM-L6-v2
+  threshold: 0.65
+  batch_size: 10
+
+fpath: ./output-raw/economics-raw-20250408-154334.jsonl
+
+output_info:
+  dir: ./output-dedup
+  fname: mcq-{topic}-dedup-{timestamp}.jsonl

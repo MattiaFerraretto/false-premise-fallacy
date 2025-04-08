@@ -1,7 +1,6 @@
 import argparse
 from rich import print
 from openai import AsyncOpenAI
-
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 import json
 import yaml

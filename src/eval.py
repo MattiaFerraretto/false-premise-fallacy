@@ -2,7 +2,6 @@ import argparse
 from rich import print
 from openai import AsyncOpenAI
 from typing import Dict
-
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 import json
 import yaml
@@ -177,7 +176,7 @@ async def eval(config: EvalConfig):
 
                 fp.flush()
 
-                await sleep(1)
+                #await sleep(1)
 
             accuracy = np.mean(exercise_results)
             std_err = np.std(exercise_results)
@@ -208,7 +207,8 @@ async def eval(config: EvalConfig):
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    #math_wrong_it= ['f0d7a7e7d8cf7cb497be7793a054222a', 'bde3e79681f53c5ed71d3e26a82f32a4', '5bfeac266fa808dbd3567676b8e4f020', '7864897e8dc2f71cf54e6f787660ba46']
+    #med_wrong_it = ['237d8388052822ec300b67c1498730a4', '5d97d93447462c6faa46a704633f1a63']
+    #math_wrong_en = ['1f6974a683dbffa3d145209dbc07b1cc']
 
     with open(args.config_path) as fp:
         conf = yaml.safe_load(fp)

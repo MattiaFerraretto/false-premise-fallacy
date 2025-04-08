@@ -1,7 +1,7 @@
 endpoint:
-  base_url: https://generativelanguage.googleapis.com/v1beta/openai/
+  base_url: https://openrouter.ai/api/v1
   api_key:
-  model: gemini-2.0-flash
+  model: google/gemini-2.0-flash-001
   gen_config:
     temperature: 1
     top_p: 1
@@ -15,7 +15,7 @@ dataset:
     - law
     - economics
     - medicine
-  token:
+  #token:
 
 batch_size: 4
 

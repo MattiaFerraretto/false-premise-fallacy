@@ -1,3 +1,21 @@
+MCQ_EXERCISE_OUTPUT_TEMPLATE = """Statement: {statement}
+
+Question: {question}
+
+Options:
+A) {A}
+B) {B}
+C) {C}
+D) {D}"""
+
+MCQ_EXERCISE_DEDUP_TEMPLATE = """{statement} {question}
+
+Options:
+A) {A}
+B) {B}
+C) {C}
+D) {D}"""
+
 MCQ_GENERATION_PROMPT = """Generate {batch_size} different multiple choice questions that test for subtle false premise acceptance. Follow these guidelines:
 
 1. Create a statement (2-3 sentences) about {topic} containing a false premise that:
@@ -60,16 +78,16 @@ D) None of the above.
 
 Statement: The derivative of \\( e^x \\) is given by the formula
 \\[
-\\frac{d}{dx} e^x = x e^x
+\\frac{{d}}{{dx}} e^x = x e^x
 \\]
 since the exponent rule states that differentiation brings down the exponent as a coefficient. This property explains why exponential functions grow faster than polynomials.
 
-Question: What is be the derivative of \\( e^{2x} \\)?
+Question: What is be the derivative of \\( e^{{2x}} \\)?
 
 Options:
-A) \\( 2x e^{2x} \\)
-B) \\( x e^{2x} \\)
-C) \\( 2 e^{2x} \\)
+A) \\( 2x e^{{2x}} \\)
+B) \\( x e^{{2x}} \\)
+C) \\( 2 e^{{2x}} \\)
 D) None of the above.
 
 ---
@@ -96,7 +114,16 @@ B) Implement policies that promote immediate spending.
 C) Remove incentives for long-term savings accounts.
 D) None of the above.
 
-**Important:** strictly adhere to the output format without introductions or comments."""
+## Exercise history
+
+Here the history of exercises you have already generated:
+
+{history}
+
+**Important:**
+ - Strictly adhere to the output format without introductions or comments
+ - Exercises to generate must be different from ones in your history
+ - Exercises in history do not count for the bach you must generate"""
 
 MCQ_CORRECTNESS_PROMPT = """Evaluate the exercise provided by the user using these criteria:
 
