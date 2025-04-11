@@ -1,3 +1,0 @@
-Tasks    Metric      Value    Stderr    Premises failed    Answered    Total
--------  --------  -------  --------  -----------------  ----------  -------
-law_en   acc        0.6832    0.4652                  1         101      102

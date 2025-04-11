@@ -1,0 +1,6 @@
+Tasks         Metric      Value    Stderr    Premises failed    Answered    Total
+------------  --------  -------  --------  -----------------  ----------  -------
+math_en       acc        0.5918    0.4915                  2          98      100
+law_en        acc        0.099     0.2987                  1         101      102
+economics_en  acc        0.6566    0.4749                  1          99      100
+medicine_en   acc        0.3723    0.4834                  6          94      100
