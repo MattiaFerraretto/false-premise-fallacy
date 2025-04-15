@@ -43,6 +43,10 @@ To run the benchmark, use the following command:
 python src/evaluate.py --config_path ./conf-examples/eval-conf-example.yaml
 ```
 
+## Maestrale
+
+Our model Maestrale can be found [here](https://huggingface.co/mii-llm/maestrale-chat-v0.4-beta).
+
 ## Benchmark Dataset
 
 The dataset used for reporting results in the technical report can be found [here](https://huggingface.co/datasets/mferraretto/fpfeval).
